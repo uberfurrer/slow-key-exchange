@@ -60,8 +60,8 @@ func Handshake(a, b *Side) ([]byte, error) {
 	serverPubkey := a.PublicKey()
 	clientPubkeyBytes := b.PublicKeyBytes()
 
-	for i := 0; i < len([]byte(b.password)); i++ {
-		clientPubkeyBytes[i] ^= []byte(b.password)[i]
+	for i := 0; i < len(b.password); i++ {
+		clientPubkeyBytes[i] ^= b.password[i]
 	}
 
 	// encrypted client public key with XORed password
@@ -79,8 +79,8 @@ func Handshake(a, b *Side) ([]byte, error) {
 		return nil, err
 	}
 
-	for i := 0; i < len([]byte(a.password)); i++ {
-		decrypted[i] ^= []byte(a.password)[i]
+	for i := 0; i < len(a.password); i++ {
+		decrypted[i] ^= a.password[i]
 	}
 
 	clientN := big.NewInt(0).SetBytes(decrypted[:256])
